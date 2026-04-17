@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APEX SPORT — Професійна спортивна екіпіровка</title>
+  <meta name="description" content="Найкращий спортивний магазин. Кросівки, одяг, обладнання від топових брендів.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+<div class="loading-bar" id="loadingBar"></div>
+
+<!-- ===== HEADER ===== -->
+<header id="header">
+  <div class="header-inner">
+    <div class="logo"><span>APEX</span> SPORT</div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Знайти товар, бренд...">
+      <div class="search-suggestions" id="searchSuggestions"></div>
+    </div>
+    <nav>
+      <a href="#" data-page="home" class="active">Головна</a>
+      <a href="#" data-page="catalog">Каталог</a>
+      <a href="#" data-page="wishlist">Обране</a>
+      <a href="#" data-page="about">Про нас</a>
+      <a href="#" id="adminBtn" style="color:var(--primary)">⚙ Адмін</a>
+    </nav>
+    <div class="header-actions">
+      <button class="header-btn" id="wishBtn" title="Обране">❤️<span class="badge" id="wishBadge" style="display:none">0</span></button>
+      <button class="header-btn" id="cartBtn" title="Кошик">🛒<span class="badge" id="cartBadge" style="display:none">0</span></button>
+      <button class="header-btn burger" id="burgerBtn">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="#" data-page="home">🏠 Головна</a>
+  <a href="#" data-page="catalog">🛍️ Каталог</a>
+  <a href="#" data-page="wishlist">❤️ Обране</a>
+  <a href="#" data-page="about">ℹ️ Про нас</a>
+  <a href="#" id="adminBtnMob" onclick="openAdmin();return false;" style="color:var(--primary)">⚙️ Адмін-панель</a>
+</div>
+
+<!-- ===== HOME ===== -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-eyebrow">Сезон 2025 / Нова колекція</div>
+        <h1 class="hero-title">ТВІЙ<br><span class="accent">СПОРТ.</span><br>ТВІЙ СТИЛЬ</h1>
+        <p class="hero-desc">Професійна екіпіровка для серйозних атлетів. Топові бренди, реальні знижки, швидка доставка по всій Україні.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" id="heroCatalogBtn">Переглянути каталог →</button>
+          <button class="btn-outline" data-page="about">Про магазин</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="num">2400+</div><div class="label">Товарів</div></div>
+          <div class="hero-stat"><div class="num">50+</div><div class="label">Брендів</div></div>
+          <div class="hero-stat"><div class="num">98%</div><div class="label">Задоволених</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-product-showcase">
+          <div class="hero-product-card">
+            <div class="product-emoji-big" id="heroProductEmoji">👟</div>
+            <div class="hero-product-name" id="heroProductName">Nike Air Max 270</div>
+            <div class="hero-product-price" id="heroProductPrice">3 299 ₴</div>
+            <button class="hero-product-btn" id="heroProductAddBtn">+ До кошика</button>
+          </div>
+          <div class="floating-tags">
+            <span class="ftag yellow">⚡ ХІТ</span>
+            <span class="ftag">Знижка -21%</span>
+            <span class="ftag">Швидка доставка</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="categories" style="background:var(--dark2)">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Навігація</div>
+        <h2 class="section-title">КАТЕГОРІЇ</h2>
+      </div>
+      <div class="categories-grid categories-grid-auto"></div>
+    </div>
+  </section>
+
+  <section id="products">
+    <div class="container">
+      <div class="section-header-row section-header">
+        <div>
+          <div class="section-label">Хіти продажів</div>
+          <h2 class="section-title">ПОПУЛЯРНЕ</h2>
+        </div>
+        <a href="#" class="see-all" data-page="catalog">Весь каталог →</a>
+      </div>
+      <div class="products-toolbar">
+        <div class="filters-row">
+          <button class="filter-btn active" data-filter="all">Усі</button>
+          <button class="filter-btn" data-filter="new">Новинки</button>
+          <button class="filter-btn" data-filter="sale">Знижки</button>
+          <button class="filter-btn" data-filter="hit">Хіти</button>
+          <button class="filter-btn" data-filter="available">В наявності</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span id="productsCount" style="font-size:13px;color:var(--gray)"></span>
+          <select class="sort-select" id="sortSelect">
+            <option value="default">За замовчуванням</option>
+            <option value="price-asc">Спочатку дешевші</option>
+            <option value="price-desc">Спочатку дорожчі</option>
+            <option value="rating">За рейтингом</option>
+            <option value="popular">За популярністю</option>
+            <option value="stock">За наявністю</option>
+          </select>
+        </div>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </section>
+
+  <div class="promo-section">
+    <div class="promo-grid container">
+      <div class="promo-card promo-card-1" data-cat="shoes"><div class="promo-emoji">👟</div><div class="promo-label">Літня колекція</div><div class="promo-title">КРОСІВКИ<br>ДО -40%</div><div class="promo-cta">Дивитись →</div></div>
+      <div class="promo-card promo-card-2" data-cat="clothing"><div class="promo-emoji">🧥</div><div class="promo-label">Новинки одягу</div><div class="promo-title">НОВА<br>ФОРМА</div><div class="promo-cta">Купити →</div></div>
+      <div class="promo-card promo-card-3" data-cat="equipment"><div class="promo-emoji">🏋️</div><div class="promo-label">Для залу</div><div class="promo-title">ФІТНЕС<br>ГАДЖЕТИ</div><div class="promo-cta">Обрати →</div></div>
+    </div>
+  </div>
+
+  <section id="brands" style="background:var(--dark2);padding:48px 24px">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:40px"><div class="section-label">Наші партнери</div><h2 class="section-title">БРЕНДИ</h2></div>
+      <div class="brands-grid">
+        <span class="brand-item">Nike</span><span class="brand-item">Adidas</span><span class="brand-item">Puma</span>
+        <span class="brand-item">Under Armour</span><span class="brand-item">New Balance</span>
+        <span class="brand-item">The North Face</span><span class="brand-item">Salomon</span>
+        <span class="brand-item">Garmin</span><span class="brand-item">Wilson</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="newsletter" style="background:var(--dark2);text-align:center">
+    <div class="container">
+      <div class="newsletter-inner">
+        <div class="section-label">Будь в курсі</div>
+        <h2 class="newsletter-title">ПІДПИСКА</h2>
+        <p class="newsletter-sub">Отримуй першим інформацію про новинки, акції та ексклюзивні знижки до 30%.</p>
+        <form class="newsletter-form" id="newsletterForm">
+          <input type="email" placeholder="Твій email адрес" required>
+          <button type="submit">Підписатись</button>
+        </form>
+        <p class="newsletter-note">Без спаму. Тільки потрібне. Відписка в 1 клік.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:16px"><span>APEX</span> SPORT</div>
+        <p class="footer-desc">Професійна спортивна екіпіровка для тих, хто серйозно ставиться до спорту.</p>
+        <div class="social-links">
+          <div class="social-link">TG</div><div class="social-link">IG</div>
+          <div class="social-link">YT</div><div class="social-link">TK</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Каталог</h4>
+        <div class="footer-links">
+          <a href="#" data-cat="shoes" data-page="catalog">Взуття</a>
+          <a href="#" data-cat="clothing" data-page="catalog">Одяг</a>
+          <a href="#" data-cat="equipment" data-page="catalog">Обладнання</a>
+          <a href="#" data-cat="accessories" data-page="catalog">Аксесуари</a>
+          <a href="#" data-filter="sale">Розпродаж</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Сервіс</h4>
+        <div class="footer-links">
+          <a href="#">Доставка</a><a href="#">Повернення</a>
+          <a href="#">Гарантія</a><a href="#">Програма лояльності</a><a href="#">FAQ</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Контакти</h4>
+        <div class="footer-links">
+          <a href="#">0 800 555-00-00</a>
+          <a href="#">info@apexsport.ua</a>
+          <a href="#">Київ, вул. Спортивна, 1</a>
+          <a href="#">Пн-Нд 9:00 – 21:00</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 APEX SPORT. Всі права захищені.</span>
+      <div class="payment-icons">
+        <span class="pay-icon">VISA</span><span class="pay-icon">MC</span>
+        <span class="pay-icon">МИР</span><span class="pay-icon">МОНОБАНК</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ===== CATALOG ===== -->
+<div class="page" id="page-catalog">
+  <div class="page-hero"><div class="page-hero-inner"><h1>КАТАЛОГ</h1><p>Вся екіпіровка на одній сторінці</p></div></div>
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" style="font-size:24px;margin-bottom:16px">Категорії</h2>
+        <div class="categories-grid categories-grid-auto" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))"></div>
+      </div>
+      <div class="products-toolbar">
+        <div class="filters-row">
+          <button class="filter-btn active" data-filter="all">Усі</button>
+          <button class="filter-btn" data-filter="new">Новинки</button>
+          <button class="filter-btn" data-filter="sale">Знижки</button>
+          <button class="filter-btn" data-filter="hit">Хіти</button>
+          <button class="filter-btn" data-filter="available">В наявності</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span id="productsCount2" style="font-size:13px;color:var(--gray)"></span>
+          <select class="sort-select" id="sortSelect2">
+            <option value="default">За замовчуванням</option>
+            <option value="price-asc">Спочатку дешевші</option>
+            <option value="price-desc">Спочатку дорожчі</option>
+            <option value="rating">За рейтингом</option>
+            <option value="popular">За популярністю</option>
+            <option value="stock">За наявністю</option>
+          </select>
+        </div>
+      </div>
+      <div class="products-grid" id="productsGrid2"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== WISHLIST ===== -->
+<div class="page" id="page-wishlist">
+  <div class="page-hero"><div class="page-hero-inner"><h1>ОБРАНЕ</h1><p>Збережені товари</p></div></div>
+  <section><div class="container"><div class="products-grid" id="wishlistGrid"></div></div></section>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<div class="page" id="page-about">
+  <div class="page-hero"><div class="page-hero-inner"><h1>ПРО МАГАЗИН</h1><p>Історія бренду APEX SPORT</p></div></div>
+  <section>
+    <div class="container" style="max-width:800px">
+      <div style="display:grid;gap:32px">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <div style="background:var(--dark3);border:1px solid #222;border-radius:12px;padding:24px;text-align:center"><div style="font-size:36px;margin-bottom:10px">🏆</div><div style="font-family:var(--font-display);font-size:32px;color:var(--primary)">2015</div><div style="font-size:12px;color:var(--gray);margin-top:4px">Рік заснування</div></div>
+          <div style="background:var(--dark3);border:1px solid #222;border-radius:12px;padding:24px;text-align:center"><div style="font-size:36px;margin-bottom:10px">📦</div><div style="font-family:var(--font-display);font-size:32px;color:var(--primary)">50K+</div><div style="font-size:12px;color:var(--gray);margin-top:4px">Замовлень на рік</div></div>
+          <div style="background:var(--dark3);border:1px solid #222;border-radius:12px;padding:24px;text-align:center"><div style="font-size:36px;margin-bottom:10px">⭐</div><div style="font-family:var(--font-display);font-size:32px;color:var(--primary)">4.9</div><div style="font-size:12px;color:var(--gray);margin-top:4px">Середній рейтинг</div></div>
+        </div>
+        <div style="background:var(--dark3);border:1px solid #222;border-radius:12px;padding:28px">
+          <h3 style="font-family:var(--font-display);font-size:26px;color:var(--primary);margin-bottom:14px">НАША МІСІЯ</h3>
+          <p style="color:var(--gray-light);line-height:1.8;font-size:15px">APEX SPORT — це не просто магазин. Ми допомагаємо людям досягати своїх спортивних цілей, надаючи найкращу екіпіровку від перевірених брендів за чесними цінами.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="background:var(--dark3);border:1px solid #222;border-radius:10px;padding:20px"><div style="font-size:24px;margin-bottom:10px">🚚</div><h4 style="font-family:var(--font-condensed);font-size:16px;letter-spacing:1px;margin-bottom:6px">ШВИДКА ДОСТАВКА</h4><p style="font-size:13px;color:var(--gray);line-height:1.6">Доставимо за 1-3 дні по Україні. Безкоштовно при замовленні від 1 500 ₴.</p></div>
+          <div style="background:var(--dark3);border:1px solid #222;border-radius:10px;padding:20px"><div style="font-size:24px;margin-bottom:10px">🔄</div><h4 style="font-family:var(--font-condensed);font-size:16px;letter-spacing:1px;margin-bottom:6px">ПОВЕРНЕННЯ 30 ДНІВ</h4><p style="font-size:13px;color:var(--gray);line-height:1.6">Не підійшло? Повернемо гроші протягом 30 днів без питань.</p></div>
+          <div style="background:var(--dark3);border:1px solid #222;border-radius:10px;padding:20px"><div style="font-size:24px;margin-bottom:10px">✅</div><h4 style="font-family:var(--font-condensed);font-size:16px;letter-spacing:1px;margin-bottom:6px">ГАРАНТІЯ ОРИГІНАЛУ</h4><p style="font-size:13px;color:var(--gray);line-height:1.6">Всі товари сертифіковані. Тільки оригінальна продукція.</p></div>
+          <div style="background:var(--dark3);border:1px solid #222;border-radius:10px;padding:20px"><div style="font-size:24px;margin-bottom:10px">💬</div><h4 style="font-family:var(--font-condensed);font-size:16px;letter-spacing:1px;margin-bottom:6px">ПІДТРИМКА 24/7</h4><p style="font-size:13px;color:var(--gray);line-height:1.6">Допоможемо з вибором, відповімо на будь-які питання.</p></div>
+        </div>
+        <div style="text-align:center;padding:16px">
+          <h3 style="font-family:var(--font-display);font-size:28px;margin-bottom:12px">ПРОМОКОДИ ДЛЯ ТЕСТУ</h3>
+          <p style="color:var(--gray);margin-bottom:16px">Спробуй у кошику:</p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <span style="padding:8px 18px;background:var(--dark3);border:1px solid var(--primary);border-radius:6px;font-family:var(--font-condensed);font-size:15px;font-weight:600;letter-spacing:2px;color:var(--primary)">SPORT10</span>
+            <span style="padding:8px 18px;background:var(--dark3);border:1px solid var(--primary);border-radius:6px;font-family:var(--font-condensed);font-size:15px;font-weight:600;letter-spacing:2px;color:var(--primary)">SUMMER20</span>
+            <span style="padding:8px 18px;background:var(--dark3);border:1px solid var(--primary);border-radius:6px;font-family:var(--font-condensed);font-size:15px;font-weight:600;letter-spacing:2px;color:var(--primary)">FIRST15</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div class="page" id="page-admin">
+  <div class="admin-header-bar">
+    <span class="admin-title">⚙ АДМІН</span>
+    <span class="admin-badge">ПАНЕЛЬ УПРАВЛІННЯ</span>
+    <button class="admin-exit-btn" onclick="navigate('home');adminLoggedIn=false;">✕ Вийти</button>
+  </div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" data-tab="products">📦 Товари</button>
+    <button class="admin-tab" data-tab="orders">🧾 Замовлення</button>
+    <button class="admin-tab" data-tab="stats">📊 Статистика</button>
+  </div>
+
+  <!-- PRODUCTS TAB -->
+  <div class="admin-panel active" id="admin-products">
+    <div class="admin-top-bar">
+      <h3>Управління товарами</h3>
+      <button class="add-product-btn" id="addProductBtn">+ Додати товар</button>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th></th><th>Назва</th><th>Категорія</th><th>Ціна</th>
+            <th>Залишок (шт.)</th><th>Мітка</th><th>Дії</th>
+          </tr>
+        </thead>
+        <tbody id="adminProductsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ORDERS TAB -->
+  <div class="admin-panel" id="admin-orders">
+    <div class="admin-top-bar"><h3>Замовлення</h3></div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr><th>№ / Дата</th><th>Товари</th><th>Сума</th><th>Промокод</th><th>Статус</th></tr>
+        </thead>
+        <tbody id="adminOrdersTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- STATS TAB -->
+  <div class="admin-panel" id="admin-stats">
+    <h3 style="margin-bottom:20px;font-family:var(--font-condensed);font-size:20px;font-weight:600;letter-spacing:1px">Загальна статистика</h3>
+    <div class="admin-stats-grid">
+      <div class="admin-stat-card"><div class="num" id="statProducts">—</div><div class="lbl">Товарів</div></div>
+      <div class="admin-stat-card"><div class="num" id="statOrders">—</div><div class="lbl">Замовлень</div></div>
+      <div class="admin-stat-card"><div class="num" id="statRevenue" style="font-size:22px">—</div><div class="lbl">Загальна виручка</div></div>
+      <div class="admin-stat-card warn"><div class="num" id="statLow">—</div><div class="lbl">Мало залишку (≤5)</div></div>
+      <div class="admin-stat-card danger"><div class="num" id="statOut">—</div><div class="lbl">Немає в наявності</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CART DRAWER ===== -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <span class="cart-title">🛒 Кошик</span>
+    <button class="cart-close" id="cartCloseBtn">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Кошик порожній</p></div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-promo">
+      <input type="text" placeholder="Промокод..." id="promoInput">
+      <button id="promoBtn">Застосувати</button>
+    </div>
+    <div class="cart-totals">
+      <div class="cart-total-row"><span>Підсумок</span><span id="cartSubtotal">0 ₴</span></div>
+      <div class="cart-total-row" id="cartDiscountRow" style="display:none"><span>Знижка</span><span class="discount" id="cartDiscount">0 ₴</span></div>
+      <div class="cart-total-row"><span>Доставка</span><span id="cartShipping">149 ₴</span></div>
+      <div class="cart-total-row grand"><span>Разом</span><span class="val" id="cartTotal">0 ₴</span></div>
+    </div>
+    <button class="cart-checkout-btn" id="checkoutBtn">Оформити замовлення →</button>
+  </div>
+</div>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="product-modal">
+    <button class="modal-close" id="modalCloseBtn">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ===== ADMIN LOGIN ===== -->
+<div class="admin-login-overlay" id="adminLoginOverlay">
+  <div class="admin-login-box">
+    <button class="admin-login-close" id="adminLoginClose">✕</button>
+    <div class="admin-login-icon">🔐</div>
+    <div class="admin-login-title">АДМІН</div>
+    <p class="admin-login-sub">Введіть пароль для доступу до панелі управління</p>
+    <input type="password" class="admin-login-input" id="adminPassInput" placeholder="Пароль...">
+    <button class="admin-login-btn" id="adminLoginBtn">Увійти</button>
+    <p class="admin-login-hint">Пароль для тесту: <strong>admin123</strong></p>
+  </div>
+</div>
+
+<!-- ===== PRODUCT FORM ===== -->
+<div class="product-form-overlay" id="productFormOverlay">
+  <div class="product-form-box">
+    <button class="form-close" id="productFormClose">✕</button>
+    <div class="product-form-title" id="productFormTitle">Додати товар</div>
+    <form id="productForm">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Назва товару *</label>
+          <input class="form-input" name="name" required placeholder="Nike Air Max 270">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Бренд *</label>
+          <input class="form-input" name="brand" required placeholder="Nike">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Категорія *</label>
+          <select class="form-select" name="category" required>
+            <option value="shoes">Взуття</option>
+            <option value="clothing">Одяг</option>
+            <option value="equipment">Обладнання</option>
+            <option value="accessories">Аксесуари</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ціна (₴) *</label>
+          <input class="form-input" name="price" type="number" min="1" required placeholder="2990">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Стара ціна (₴)</label>
+          <input class="form-input" name="oldPrice" type="number" min="0" placeholder="3990">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Емодзі товару</label>
+          <input class="form-input" name="emoji" placeholder="👟" maxlength="4">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Мітка</label>
+          <select class="form-select" name="badge">
+            <option value="">— Без мітки —</option>
+            <option value="new">NEW</option>
+            <option value="sale">SALE</option>
+            <option value="hit">ХІТ</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Кількість на складі *</label>
+          <input class="form-input" name="stock" type="number" min="0" required placeholder="10">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Рейтинг (1-5)</label>
+          <input class="form-input" name="rating" type="number" min="1" max="5" step="0.1" placeholder="4.5">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Розміри (через кому)</label>
+          <input class="form-input" name="sizes" placeholder="40,41,42,43,44 або XS,S,M,L,XL">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Опис товару</label>
+          <textarea class="form-textarea" name="desc" placeholder="Короткий опис товару..."></textarea>
+        </div>
+      </div>
+      <button type="submit" class="form-submit">💾 Зберегти товар</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="js/db.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
